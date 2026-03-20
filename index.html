@@ -2,10 +2,124 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Raspadinha Açaístel</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: url('bg.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  position: relative;
+  width: 350px;
+  height: 700px;
+}
+
+canvas {
+  position: absolute;
+  top: 360px;
+  left: 25px;
+  width: 300px;
+  height: 170px;
+  border-radius: 20px;
+}
+
+#btn {
+  position: absolute;
+  top: 550px;
+  left: 40px;
+  width: 270px;
+  height: 55px;
+  background: transparent;
+  border: none;
+}
+
+#whatsappBtn {
+  position: absolute;
+  top: 620px;
+  left: 40px;
+  width: 270px;
+  height: 55px;
+  display: none;
+}
+</style>
 </head>
+
 <body>
-<h1>Arquivo gerado corretamente</h1>
-<p>Substitua pelo código completo enviado no chat.</p>
+
+<div class="container">
+
+<canvas id="scratch" width="300" height="170"></canvas>
+
+<button id="btn"></button>
+
+<a id="whatsappBtn" target="_blank">
+  <button style="width:100%;height:100%;background:transparent;border:none;"></button>
+</a>
+
+</div>
+
+<script>
+const canvas = document.getElementById("scratch");
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#c0c0c0";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+let drawing = false;
+
+function scratch(e) {
+  if (!drawing) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.beginPath();
+  ctx.arc(x, y, 20, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+canvas.addEventListener("mousedown", () => drawing = true);
+canvas.addEventListener("mouseup", () => drawing = false);
+canvas.addEventListener("mousemove", scratch);
+
+canvas.addEventListener("touchstart", () => drawing = true);
+canvas.addEventListener("touchend", () => drawing = false);
+canvas.addEventListener("touchmove", scratch);
+
+const btn = document.getElementById("btn");
+const whatsappBtn = document.getElementById("whatsappBtn");
+
+btn.addEventListener("click", () => {
+
+  const premios = [
+    "🥤 Açaí 250ml",
+    "🥤 Açaí 300ml",
+    "❌ Não foi dessa vez"
+  ];
+
+  const premio = premios[Math.floor(Math.random() * premios.length)];
+
+  alert("Resultado: " + premio);
+
+  const numero = "5577981570174";
+
+  const msg = `Ganhei na raspadinha Açaístel!\\n${premio}`;
+  const link = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+
+  whatsappBtn.href = link;
+  whatsappBtn.style.display = "block";
+});
+</script>
+
 </body>
 </html>
